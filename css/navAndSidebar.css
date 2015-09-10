@@ -34,6 +34,19 @@ body {
     border-radius: 50%;
 }
 
+ul.dropdown-menu {
+    background-color: #2C3031;
+}
+
+ul.dropdown-menu a {
+    color: #B9BEC1;
+}
+
+ul.dropdown-menu a:hover {
+    background-color: #5191c8;
+    color: #B9BEC1;
+}
+
 /*
  * Sidebar
  */
