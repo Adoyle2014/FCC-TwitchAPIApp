@@ -54,13 +54,13 @@
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Channels</a></li>
-                            <li><a href="#">Streams</a></li>
-                            <li><a href="#">Games</a></li>
+                            <li class="search-type" data-id="channels"><a href="#">Channels</a></li>
+                            <li class="search-type" data-id="streams"><a href="#">Streams</a></li>
+                            <li class="search-type" data-id="games"><a href="#">Games</a></li>
                         </ul>
                     </div><!-- /btn-group -->
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn"><button class="btn btn-primary" type="button">Go!</button></span>
+                    <input type="text" id="search-input" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn"><button class="btn btn-primary" id="search-btn" type="button">Go!</button></span>
                 </div><!-- /input-group -->
 
             </form>
@@ -88,16 +88,16 @@
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="row page-title">
+            <div class="row">
                 <div class="col-md-6 pull-left">
-                    <h2>Welcome to the Twitch Viewer</h2>
+                    <h2 id="page-title">Welcome to the Twitch Viewer</h2>
                 </div>
                 <div class="col-md-2 pull-right">
-                    <h3><div class="btn btn-primary"><i class="fa fa-sort-amount-desc"></i><i class="fa fa-sort-amount-asc hidden"></i></div> <div class="btn btn-primary"><i class="fa fa-sort-alpha-asc"></i><i class="fa fa-sort-alpha-desc hidden"></i></div></h3>
+                    <h3><div class="btn btn-primary" id="sort-pop"><i class="fa fa-sort-amount-desc"></i><i class="fa fa-sort-amount-asc hidden"></i></div> <div class="btn btn-primary" id="sort-alpha"><i class="fa fa-sort-alpha-asc"></i><i class="fa fa-sort-alpha-desc hidden"></i></div></h3>
                 </div>
             </div><!--END TITLE-->
             <hr>
-            <div class="row">
+            <div class="row index">
                 <div class="col-md-12 text-center">
                     <div class="well stream-blocks">
                         <h3>This is a project for Free Code Camp. At the very least, I need to show:</h3>
@@ -111,7 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row index">
                 <div class="col-md-12">
                     <div class="well stream-blocks">
                         <h3 class="text-center">Using the Twitch.tv Viewer</h3>
