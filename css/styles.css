@@ -3,3 +3,26 @@ font-family: 'Roboto', sans-serif;
 font-family: 'Montserrat', sans-serif;
 */
 
+.page-title h2 {
+    color: #316a9c;
+}
+
+.well {
+    background: #2C3031;
+    color: #B9BEC1;
+    border-radius: 10px;
+}
+
+.stream-blocks img {
+    border-radius: 10px;
+    border: 2px solid #B9BEC1;
+    -webkit-box-shadow: 0 0 5px #5191c8;
+    -moz-box-shadow: 0 0 5px #5191c8;
+    box-shadow: 0 0 8px #5191c8;
+}
+
+.stream-blocks li {
+    list-style: none;
+    font-size: 1.3em;
+}
+

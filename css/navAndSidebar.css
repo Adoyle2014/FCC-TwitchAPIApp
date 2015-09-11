@@ -101,6 +101,10 @@ ul.dropdown-menu a:hover {
     cursor: default;
 }
 
+.input-group-btn > .btn  {
+    color: #5191c8;
+}
+
 
 /*
  * Main content

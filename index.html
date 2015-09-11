@@ -47,8 +47,7 @@
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Adam Doyle</a></li>
-                <li><img src="images/me.jpg" class="avatar"></li>
-
+                <li class="hidden-xs"><img src="images/me.jpg" class="avatar"></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <div class="input-group">
@@ -56,7 +55,7 @@
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a href="#">Channels</a></li>
-                            <li><a href="#">Users</a></li>
+                            <li><a href="#">Streams</a></li>
                             <li><a href="#">Games</a></li>
                         </ul>
                     </div><!-- /btn-group -->
@@ -75,7 +74,7 @@
             <h2>Filter</h2>
             <ul class="nav nav-sidebar">
                 <li class="active"><a href="#"><i class="fa fa-star-o"></i> Featured <span class="sr-only">(current)</span></a></li>
-                <li><a href="#"><i class="fa fa-sort"></i> Sort</a></li>
+                <li><a href="#"><i class="fa fa-film"></i> Videos</a></li>
                 <li><a href="#"> <i class="fa fa-television"> Live</i></a></li>
                 <li><a href="#"><i class="fa fa-thumbs-o-up"></i> Most Watched</a></li>
 
@@ -89,8 +88,46 @@
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="row page-title">
+                <div class="col-md-6 pull-left">
+                    <h2>Welcome to the Twitch Viewer</h2>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <h3><div class="btn btn-primary"><i class="fa fa-sort-amount-desc"></i><i class="fa fa-sort-amount-asc hidden"></i></div> <div class="btn btn-primary"><i class="fa fa-sort-alpha-asc"></i><i class="fa fa-sort-alpha-desc hidden"></i></div></h3>
+                </div>
+            </div><!--END TITLE-->
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="well stream-blocks">
+                        <h3>This is a project for Free Code Camp. At the very least, I need to show:</h3>
+                        <ul>
+                            <li>Whether Free Code Camp is currently streaming.</li>
+                            <li>Provide the ability to click on the FCC channel status and be sent directly to FCC's Twitch.tv channel.</li>
+                            <li>I need to show details about what FCC is streaming when they are live.</li>
+                            <li>Allow users to search through listed streams.</li>
+                            <li>Use placeholder notification for streamers that have closed their Twitch account.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well stream-blocks">
+                        <h3 class="text-center">Using the Twitch.tv Viewer</h3>
+                        <ul>
+                            <li>Whether Free Code Camp is currently streaming.</li>
+                            <li>Provide the ability to click on the FCC channel status and be sent directly to FCC's Twitch.tv channel.</li>
+                            <li>I need to show details about what FCC is streaming when they are live.</li>
+                            <li>Allow users to search through listed streams.</li>
+                            <li>Use placeholder notification for streamers that have closed their Twitch account.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-        </div>
+
+        </div><!--END MAIN-->
     </div>
 </div>
 
