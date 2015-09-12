@@ -3,6 +3,20 @@ font-family: 'Roboto', sans-serif;
 font-family: 'Montserrat', sans-serif;
 */
 
+a:link, a:visited {
+    color: #5191c8;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #B9BEC1;
+}
+
+.sort {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
 .page-title {
     color: #316a9c;
 }
@@ -24,5 +38,9 @@ font-family: 'Montserrat', sans-serif;
 .stream-blocks li {
     list-style: none;
     font-size: 1.3em;
+}
+
+#main-row {
+    display: none;
 }
 

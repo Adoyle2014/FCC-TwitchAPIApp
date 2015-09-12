@@ -93,10 +93,13 @@
                     <h2 id="page-title">Welcome to the Twitch Viewer</h2>
                 </div>
                 <div class="col-md-2 pull-right">
-                    <h3><div class="btn btn-primary" id="sort-pop"><i class="fa fa-sort-amount-desc"></i><i class="fa fa-sort-amount-asc hidden"></i></div> <div class="btn btn-primary" id="sort-alpha"><i class="fa fa-sort-alpha-asc"></i><i class="fa fa-sort-alpha-desc hidden"></i></div></h3>
+                    <div class="btn btn-primary btn-lg sort" id="sort-pop"><i class="fa fa-sort-amount-desc"></i><i class="fa fa-sort-amount-asc hidden"></i></div><div class="btn btn-primary btn-lg sort" id="sort-alpha"><i class="fa fa-sort-alpha-asc"></i><i class="fa fa-sort-alpha-desc hidden"></i></div>
                 </div>
             </div><!--END TITLE-->
             <hr>
+            <div id="main-row">
+
+            </div>
             <div class="row index">
                 <div class="col-md-12 text-center">
                     <div class="well stream-blocks">
@@ -123,6 +126,14 @@
                             <li>Use placeholder notification for streamers that have closed their Twitch account.</li>
                         </ul>
                     </div>
+                </div>
+            </div>
+            <div class="row" id="pagination">
+                <div class="col-md-1 pull-left text-left">
+                    <div class="btn btn-primary btn-lg" id="page-previous"><i class="fa fa-arrow-left"></i></div>
+                </div>
+                <div class="col-md-1 pull-right text-right">
+                    <div class="btn btn-primary btn-lg" id="page-next"><i class="fa fa-arrow-right"></i></div>
                 </div>
             </div>
 
