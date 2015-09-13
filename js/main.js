@@ -10,22 +10,38 @@ $(document).ready(function() {
 
 function main() {
 
+//Declare main() variables
     var next = '';
     var self = '';
     var prev = '';
+    var searchType = 'channels';
+
+
+
+
+    //Click event handlers
+    $(".search-type").on('click', function(e) {
+        e.preventDefault();
+        searchType = $(this).attr("data-id");
+
+    });
+
+    $("#search-btn").on('click', function(e) {
+        e.preventDefault();
+        var searchTerm = $("#search-input").val();
+        twitchSearch(searchTerm);
+    });
 
     $("#featured").on('click', function(e) {
         e.preventDefault();
-        var url = "https://api.twitch.tv/kraken/streams/featured";
-        var featuredSearch = new TwitchApiCall(url);
-        featuredSearch.call();
+
     });
 
 
 
-    twitchSearch();
 
-    /*$("#page-previous").on('click', function() {
+
+    $("#page-previous").on('click', function() {
        if(prev) {
            pagePrev();
        }
@@ -35,72 +51,81 @@ function main() {
     $("#page-next").on('click', function() {
        if(next) {
            pageNext();
+           console.log(next);
        }
 
-    });*/
+    });
 
 
 
 
 
 
-    function twitchSearch() {
+    function twitchSearch(searchTerm) {
+        var params = {'q': searchTerm, 'limit': 9};
+        var url = "https://api.twitch.tv/kraken/search/" + searchType + "?";
 
-        var searchType = "channels";
-
-
-        $(".search-type").on('click', function(e) {
-            e.preventDefault();
-            searchType = $(this).attr("data-id");
-
-        });
-
-        $("#search-btn").on('click', function(e) {
-            e.preventDefault();
-            searchTerm = $("#search-input").val();
-            var params = {'q': searchTerm, 'limit': 13};
-            var url = "https://api.twitch.tv/kraken/search/" + searchType + "?";
-
-            if(searchType === "games") {
-                url = "https://api.twitch.tv/kraken/search/games?type=suggest";
-                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
-                    displaySearchResults(data.games);
-                });
-
-            } else if (!searchType || searchType === "channels") {
-                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
-                    displaySearchResults(data.channels);
-                });
-
-            } else {
-                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
-                    displaySearchResults(data.streams);
-                });
-            }
-        });
-    }
-
-    function TwitchApiCall(searchType, searchTerm, params, url, callback) {
-
-             $.ajax({
-                    url: url,
-                    data: params,
-                    success: function(response) {
-                        next = response._links.next;
-                        prev = response._links.prev;
-                        callback(response);
-                    }
+        if(searchType === "games") {
+            url = "https://api.twitch.tv/kraken/search/games?type=suggest";
+            TwitchApiCall(params, url, function(data) {
+                displaySearchResults(data.games);
             });
 
-            $("#page-title").html("Twitch.tv/" + searchType + "/" + searchTerm);
-            $("#sort-pop").addClass('active');
+        } else if (searchType === "channels") {
+            TwitchApiCall(params, url, function(data) {
+                displaySearchResults(data.channels);
+            });
+
+        } else {
+            TwitchApiCall(params, url, function(data) {
+                displaySearchResults(data.streams);
+            });
+        }
+        $("#page-title").html("Twitch.tv/" + searchType + "/" + searchTerm);
+        $("#sort-pop").addClass('active');
+    }
+
+    //API call
+    function TwitchApiCall(params, url, callback) {
+        if(params === '') {
+            $.ajax({
+                url: url,
+                success: function (response) {
+                    next = response._links.next;
+                    prev = response._links.prev;
+                    console.log(response);
+                    callback(response);
+                },
+                error: function (jqXHR, textStatus) {
+                    $("#main-row").append('<div class="col-md-12"><div class="well error-well stream-blocks"><h3>The request has failed: ' + textStatus + '</h3></div></div>');
+                }
+            });
+        } else {
+            $.ajax({
+                url: url,
+                data: params,
+                success: function(response) {
+                    next = response._links.next;
+                    prev = response._links.prev;
+                    console.log(response);
+                    callback(response);
+                },
+                error: function(jqXHR, textStatus) {
+                    $("#main-row").fadeOut('slow', function () {
+                        $("#main-row").empty();
+                        $("#main-row").append('<div class="col-md-12"><div class="well error-well stream-blocks"><h3>The request has failed: ' + textStatus + '</h3></div></div>');
+                        $("#main-row").fadeIn('slow');
+                    })
+                }
+            });
+        }
+
+
 
     }
 
 
     function displaySearchResults(data) {
-        console.log(data);
-
         $(".index").fadeOut('slow');
         $("#main-row").fadeOut('slow', function () {
             $("#main-row").empty();
@@ -116,67 +141,34 @@ function main() {
                 var followers = data[i].followers;
                 var twitchLink = data[i].url;
 
-                $("#main-row").append('<div class="col-md-4"><div class="well stream-blocks"><div class="row"><div class="col-sm-12 text-center"><h4>' + displayName + '</h4></div></div><div class="row"><div class="col-md-6"><img class="stream-images img-responsive" src="' + logo + '"></div><div class="col-md-6 text-center"><h5>offline</h5><h5>' + views + ' Total Views</h5><h5>' + followers + ' Followers</h5><h5><a href="' + twitchLink + '" target="_blank">View on Twitch</a> </h5></div></div></div></div>');
-
+                $("#main-row").append('<div class="col-md-4"><div class="well stream-blocks"><div class="row"><div class="col-sm-12 text-center"><h4>' + displayName + '</h4></div></div><div class="row"><div class="col-md-6"><img class="stream-images img-responsive" src="' + logo + '"></div><div class="col-md-6 text-center"><h5>offline</h5><h5>' + views + ' Total Views</h5><h5>' + followers + ' Followers</h5><h5><a href="' + twitchLink + '" target="_blank">View on Twitch</a></h5></div></div></div></div>');
             }
         });
-
         $("#main-row").fadeIn('slow');
-
     }
 
     function pageNext() {
         console.log(next);
+        var params = '';
+        TwitchApiCall(params, next, function(data) {
+            data = data;
+            displaySearchResults(data.channels);
+        });
+
     }
 
     function pagePrev() {
         console.log(prev);
+        var params = '';
+        TwitchApiCall(params, prev, function(data) {
+            data = data;
+            displaySearchResults(data.channels);
+        });
     }
 
 
 
 
-    /*function twitchApiSearchCall(searchType, searchTerm, params, url) {
-
-        var urlString = "";
-        if (url) {
-            urlString = url;
-            params = {};
-        } else if (searchType === "games") {
-            urlString = "https://api.twitch.tv/kraken/search/games?type=suggest"
-        } else {
-            urlString = "https://api.twitch.tv/kraken/search/" + searchType + "?";
-        }
-
-
-        $.ajax({
-            url: urlString,
-
-            data: params,
-
-            success: function (response) {
-                console.log(response);
-                var data = [];
-                next = response._links.next;
-                prev = response._links.prev;
-                console.log(next + " - " + self);
-                if (searchType === "channels") {
-                    data = response.channels;
-                } else if (searchType === "streams") {
-                    data = response.streams;
-                } else {
-                    data = response.games;
-                }
-
-                displaySearchResults(data);
-
-            }
-        });
-
-        $("#page-title").html("Twitch.tv/" + searchType + "/" + searchTerm);
-        $("#sort-pop").addClass('active');
-
-    }*/
 
 
 
