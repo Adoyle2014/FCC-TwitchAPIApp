@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
 
-main();
+    main();
+
+
 
 
 });
@@ -11,6 +13,14 @@ function main() {
     var next = '';
     var self = '';
     var prev = '';
+
+    $("#featured").on('click', function(e) {
+        e.preventDefault();
+        var url = "https://api.twitch.tv/kraken/streams/featured";
+        var featuredSearch = new TwitchApiCall(url);
+        featuredSearch.call();
+    });
+
 
 
     twitchSearch();
@@ -30,6 +40,10 @@ function main() {
     });*/
 
 
+
+
+
+
     function twitchSearch() {
 
         var searchType = "channels";
@@ -41,64 +55,46 @@ function main() {
 
         });
 
-        $("#search-btn").on('click', function (e) {
+        $("#search-btn").on('click', function(e) {
             e.preventDefault();
             searchTerm = $("#search-input").val();
-            var params = {'q': searchTerm, 'limit': 12};
+            var params = {'q': searchTerm, 'limit': 13};
             var url = "https://api.twitch.tv/kraken/search/" + searchType + "?";
 
             if(searchType === "games") {
                 url = "https://api.twitch.tv/kraken/search/games?type=suggest";
-                var gamesSearch = new TwitchApiCall(searchType, searchTerm, params, url);
-                gamesSearch.call();
-            } else if (!searchType) {
+                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
+                    displaySearchResults(data.games);
+                });
 
-                var defaultSearch = new TwitchApiCall(searchType, searchTerm, params, url);
-                defaultSearch.call();
+            } else if (!searchType || searchType === "channels") {
+                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
+                    displaySearchResults(data.channels);
+                });
+
             } else {
-                var chanStreSearch = new TwitchApiCall(searchType, searchTerm, params, url);
-                chanStreSearch.call();
+                TwitchApiCall(searchType, searchTerm, params, url, function(data) {
+                    displaySearchResults(data.streams);
+                });
             }
         });
-
-
     }
 
+    function TwitchApiCall(searchType, searchTerm, params, url, callback) {
 
-
-    function TwitchApiCall(searchType, searchTerm, params, url) {
-        this.searchType = searchType;
-        this.searchTerm = searchTerm;
-        this.params = params;
-        this.url = url;
-
-
-        this.call = function() {
-            $.ajax({
-                url: this.url,
-
-                data: this.params,
-
-                success: function (response) {
-                    var data = [];
-                    next = response._links.next;
-                    prev = response._links.prev;
-
-                    if (searchType === "channels") {
-                        data = response.channels;
-                    } else if (searchType === "streams") {
-                        data = response.streams;
-                    } else {
-                        data = response.games;
+             $.ajax({
+                    url: url,
+                    data: params,
+                    success: function(response) {
+                        next = response._links.next;
+                        prev = response._links.prev;
+                        callback(response);
                     }
-
-                    displaySearchResults(data);
-
-                }
             });
+
             $("#page-title").html("Twitch.tv/" + searchType + "/" + searchTerm);
             $("#sort-pop").addClass('active');
-        }
+
     }
 
 
