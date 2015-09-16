@@ -27,12 +27,19 @@ a:hover {
     border-radius: 10px;
 }
 
-.stream-blocks img {
+.stream-images {
     border-radius: 10px;
     border: 2px solid #B9BEC1;
     -webkit-box-shadow: 0 0 5px #5191c8;
     -moz-box-shadow: 0 0 5px #5191c8;
     box-shadow: 0 0 8px #5191c8;
+    width: 320px;
+    height: 180px;
+}
+
+.stream-channel-logo {
+    width: 200px;
+    height: 112px;
 }
 
 .stream-blocks li {
@@ -43,5 +50,11 @@ a:hover {
 #main-row {
     display: none;
     text-align: center;
+}
+
+
+
+.row-margin-bottom-20 {
+    margin-bottom: 20px;
 }
 
