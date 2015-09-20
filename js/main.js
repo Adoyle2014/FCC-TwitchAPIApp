@@ -18,7 +18,17 @@ function main() {
 
 
 
+
+
 //Click event handlers============================
+    $("#search-input").on('focus', function(e) {
+        e.preventDefault();
+        if(!searchType) {
+            searchType = "channels";
+        }
+
+    });
+
     $(".search-type").on('click', function(e) {
         e.preventDefault();
         searchType = $(this).attr("data-id");
@@ -28,11 +38,15 @@ function main() {
     $("#search-btn").on('click', function(e) {
         e.preventDefault();
         var searchTerm = $("#search-input").val();
+        if(searchType != "channels" || searchType != "streams" || searchType != "games") {
+            searchType = "channels";
+        }
         twitchSearch(searchTerm);
     });
 
     $("#featured").on('click', function(e) {
         e.preventDefault();
+        searchType = $(this).attr("data-id");
         twitchFeaturedStreams();
     });
 
@@ -43,7 +57,7 @@ function main() {
 
     $("#top-videos").on('click', function(e) {
         e.preventDefault();
-        twitchTopVideos();
+        twitchVideos();
     });
 
     $("#top-games").on('click', function(e) {
@@ -60,8 +74,13 @@ function main() {
     $("#page-next").on('click', function() {
        if(next) {
            pageNext();
-           console.log(next);
        }
+    });
+
+    $("#main-row").on('click', '.showChannelVideos', function(e) {
+        e.preventDefault();
+        var dataUrl = $(this).attr("data-url");
+        twitchVideos(dataUrl);
     });
 
 
@@ -69,7 +88,7 @@ function main() {
 
 //Get API call data============================
     function twitchFeaturedStreams() {
-        var params = {'limit': 9};
+        var params = {'limit': 8};
         var url = "https://api.twitch.tv/kraken/streams/featured?";
         TwitchApiCall(params, url, function(data) {
             displayStreamsResults(data);
@@ -92,9 +111,11 @@ function main() {
         });
     }
 
-    function twitchTopVideos() {
+    function twitchVideos(url) {
         var params = {'limit': 9};
-        var url = "https://api.twitch.tv/kraken/videos/top?";
+        if(!url) {
+            url = "https://api.twitch.tv/kraken/videos/top?";
+        }
         TwitchApiCall(params, url, function(data) {
             displayVideosResults(data);
         });
@@ -134,33 +155,34 @@ function main() {
 
 //Display results of api calls=====================
     function displayStreamsResults(data) {
-        console.log(data);
+        data = data.featured;
         $(".index").fadeOut('slow');
         $("#main-row").fadeOut('slow', function () {
             $("#main-row").empty();
 
+            var game, viewers, streamTitle, streamId, channelId, channelName, channelFollowers, channelViews, channelUrl, channelLogo, channelStatus, channelVideosLink, previewMedium;
+
             for (var i = 0; i < data.length; i++) {
-                var game = data[i].game;
-                var viewers = data[i].viewers;
-                var streamId = data[i]._id;
-                var channelId = data[i].channel._id;
-                var channelName = data[i].channel.display_name;
-                var channelFollowers = data[i].channel.followers;
-                var channelViews = data[i].channel.views;
-                var channelUrl = data[i].channel.url;
-                var channelLogo = data[i].channel.logo;
-                var channelStatus = data[i].channel.status;
-                var channelVideosLink = data[i].channel._links.videos;
-                var previewMedium = data[i].preview.medium;
+                game = data[i].stream.game;
+                viewers = data[i].stream.viewers;
+                streamTitle = data[i].title;
+                streamId = data[i].stream._id;
+                channelId = data[i].stream.channel._id;
+                channelName = data[i].stream.channel.display_name;
+                channelFollowers = data[i].stream.channel.followers;
+                channelViews = data[i].stream.channel.views;
+                channelUrl = data[i].stream.channel.url;
+                channelLogo = data[i].stream.channel.logo;
+                channelStatus = data[i].stream.channel.status;
+                channelVideosLink = data[i].stream.channel._links.videos;//use with call to twitchApiCall
+                previewMedium = data[i].stream.preview.medium;
 
-
-
-
-
-
-
+                $("#main-row").append('<div class="col-md-6"><div class="well stream-blocks"><div class="row row-margin-bottom-20"><div class="col-sm-12 text-center"><h3>' + streamTitle +'</h3></div></div><div class="row"><div class="col-md-6"><h4 class="text-center">' + game + '</h4><img class="stream-images" src="' + previewMedium + '"><div class="col-md-6"><h5>' + viewers + ' viewing Live</h5></div><div class="col-md-6"><h5><a href="' + channelUrl + '" target="_blank">Watch on Twitch</a></h5></div></div><div class="col-md-6 text-center"><h4><a href="' + channelUrl + '" target="_blank">' + channelName + '</a></h4><h5>Check out ' + channelName + 's <a href="#" class="showChannelVideos" data-url="' + channelVideosLink + '">videos!</a></h5><img class="stream-channel-logo" src="' + channelLogo + '"><h5>' + channelViews + ' Total Views</h5><h5>' + channelFollowers + ' Followers</h5></div></div></div></div>');
             }
+
         });
+        $("#page-title").html("Featured Streams");
+        $("#sort-pop").addClass('active');
         $("#main-row").fadeIn('slow');
 
 
@@ -202,7 +224,11 @@ function main() {
         console.log(next);
         var params = '';
         TwitchApiCall(params, next, function(data) {
-            return (data.channels);
+            if(searchType === "featured") {
+                displayStreamsResults(data)
+            } else {
+                displayChannelResults(data.channels);
+            }
         });
     }
 
@@ -210,8 +236,11 @@ function main() {
         console.log(prev);
         var params = '';
         TwitchApiCall(params, prev, function(data) {
-            data = data;
-            displayChannelResults(data.channels);
+            if(searchType === "featured") {
+                displayStreamsResults(data)
+            } else {
+                displayChannelResults(data.channels);
+            }
         });
     }
 
@@ -224,8 +253,16 @@ function main() {
                 success: function (response) {
                     next = response._links.next;
                     prev = response._links.prev;
-                    console.log(response);
                     callback(response);
+                    $("#pagination").removeClass("hidden");
+                    if (!prev) {
+                        $("#page-previous").addClass("disabled");
+                    } else {
+                        $("#page-previous").removeClass("disabled");
+                    }
+                    if(!next) {
+                        $("#page-next").addClass("disabled");
+                    }
                 },
                 error: function (jqXHR, textStatus) {
                     $("#main-row").append('<div class="col-md-12"><div class="well error-well stream-blocks"><h3>The request has failed: ' + textStatus + '</h3></div></div>');
@@ -238,8 +275,17 @@ function main() {
                 success: function(response) {
                     next = response._links.next;
                     prev = response._links.prev;
-                    console.log(response);
                     callback(response);
+                    $("#pagination").removeClass("hidden");
+                    if (!prev) {
+                        $("#page-previous").addClass("disabled");
+                    } else {
+                        $("#page-previous").removeClass("disabled");
+                    }
+                    if(!next) {
+                        $("#page-next").addClass("disabled");
+                    }
+
                 },
                 error: function(jqXHR, textStatus) {
                     $("#main-row").fadeOut('slow', function () {

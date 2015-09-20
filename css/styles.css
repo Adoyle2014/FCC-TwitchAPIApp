@@ -42,6 +42,10 @@ a:hover {
     height: 112px;
 }
 
+.stream-blocks {
+    min-height: 420px;
+}
+
 .stream-blocks li {
     list-style: none;
     font-size: 1.3em;
